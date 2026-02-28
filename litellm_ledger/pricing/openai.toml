@@ -1,0 +1,24 @@
+# OpenAI pricing (USD per 1M tokens)
+# Source: https://openai.com/api/pricing/
+# Updated: 2026-02-27
+# Models: GPT-5 series (GA only)
+#
+# Note on reasoning/thinking tokens:
+#   GPT-5 series does not expose a separate reasoning token rate;
+#   reasoning tokens are billed at the same rate as output tokens.
+#   The `thinking` key is set explicitly here for clarity and future-proofing.
+
+[models."gpt-5"]
+input    = 1.25
+output   = 10.00
+thinking = 10.00
+
+[models."gpt-5-mini"]
+input    = 0.25
+output   = 2.00
+thinking = 2.00
+
+[models."gpt-5-nano"]
+input    = 0.05
+output   = 0.40
+thinking = 0.40
