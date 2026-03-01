@@ -11,7 +11,7 @@ MODEL = "gemini/gemini-2.5-flash"
 def main():
     client = LiteLLMClient(
         db_path="ledger_history.db",
-        api_keys={"GEMINI_API_KEY": "Set Your API KEY"},
+        api_keys={"GEMINI_API_KEY": "your-api-key"},
     )
 
     # --- テキストチャット ---

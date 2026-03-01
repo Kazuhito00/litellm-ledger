@@ -13,7 +13,7 @@ class LiteLLMClient:
 
     Usage:
         client = LiteLLMClient(
-            api_keys={"OPENAI_API_KEY": "sk-...", "GEMINI_API_KEY": "..."}
+            api_keys={"OPENAI_API_KEY": "your-api-key", "GEMINI_API_KEY": "your-api-key"}
         )
         response = client.chat("gpt-4o", [{"role": "user", "content": "Hello"}])
         client.db.to_csv("history.csv")

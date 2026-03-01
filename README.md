@@ -48,7 +48,7 @@ response = client.chat("gemini/gemini-2.5-flash", [
     ]}
 ])
 
-# LiteLLM のオプションはそのまま渡せる
+# temperature や max_tokens の指定
 response = client.chat(
     "gemini/gemini-2.5-flash",
     [{"role": "user", "content": "Hello"}],
@@ -72,7 +72,7 @@ client.db.to_csv("ledger_history.csv")
 |---|---|---|
 | `db_path` | `"ledger_history.db"` | SQLite DB ファイルのパス。自動作成される |
 | `pricing_dir` | `litellm_ledger/pricing/` | 料金 TOML ディレクトリ |
-| `api_keys` | `None` | `{"GEMINI_API_KEY": "..."}` 形式の辞書 |
+| `api_keys` | `None` | `{"GEMINI_API_KEY": "..."}` 形式の辞書。料金 TOML の都合上、`OPENAI_API_KEY` / `GEMINI_API_KEY` に対応 |
 
 | メソッド | 説明 |
 |---|---|
