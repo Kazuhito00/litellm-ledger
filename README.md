@@ -41,12 +41,16 @@ print(response.choices[0].message.content)
 
 # 画像（base64）
 import base64
-image_b64 = base64.b64encode(open("photo.jpg", "rb").read()).decode()
+from pathlib import Path
+image_b64 = base64.b64encode(Path("sample.jpg").read_bytes()).decode()
 response = client.chat("gemini/gemini-2.5-flash", [
-    {"role": "user", "content": [
-        {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image_b64}"}},
-        {"type": "text", "text": "何が写っていますか？"},
-    ]}
+    {
+        "role": "user",
+        "content": [
+            {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image_b64}"}},
+            {"type": "text", "text": "何が写っていますか？"},
+        ],
+    }
 ])
 
 # temperature や max_tokens の指定
