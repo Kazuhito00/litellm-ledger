@@ -35,7 +35,7 @@ client = LiteLLMClient(
 # テキスト
 response = client.chat(
     "gemini/gemini-2.5-flash",
-    [{"role": "user", "content": "Hello"}],
+    [{"role": "user", "content": "こんにちは"}],
 )
 print(response.choices[0].message.content)
 
