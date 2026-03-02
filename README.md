@@ -1,15 +1,16 @@
-# litellm-ledger
+> [!WARNING]
+> コスト計算の正確性は保証しません。参考程度です。<br>
+> また、料金レートはライブラリ内のTOMLに保持しており、各サービスのアップデートなどでズレる可能性があります。
 
-[LiteLLM](https://github.com/BerriAI/litellm) の `completion()` を薄くラップし、**呼び出し履歴の記録・コスト計算・CSV出力**を自動化するユーティリティライブラリ。
+# LiteLLM Ledger
 
-`litellm_ledger/` ディレクトリを丸ごとコピーするだけで他のプロジェクトに持ち込める設計。
+[LiteLLM](https://github.com/BerriAI/litellm) の `completion()` を薄くラップし、呼び出し履歴・コスト計算をローカルDBに記録するライブラリ。<br>
+使用する際には`litellm_ledger/` ディレクトリを丸ごとコピーする。
 
 ## 機能
 
-- `chat()` を呼ぶだけで履歴とコストを SQLite に自動記録
-- Thinking / Reasoning トークンを正しく分離してコスト計算（二重計算を防ぐ）
-- 料金レートは TOML ファイルで管理。ファイルを追加するだけで新プロバイダに対応
-- 段階料金に対応（例: Gemini 2.5 Pro の 200k トークン超）
+- `chat()` を呼んだタイミングで履歴とコストを SQLite に記録
+- 料金レートは TOML ファイルで管理　※OpenAI APIとGemini APIのみ対応
 - 日付・日付範囲で履歴・コスト・CSV を取得
 
 ## 動作要件
@@ -70,9 +71,9 @@ client.db.to_csv("ledger_history.csv")
 
 | 引数 | デフォルト | 説明 |
 |---|---|---|
-| `db_path` | `"ledger_history.db"` | SQLite DB ファイルのパス。自動作成される |
+| `db_path` | `"ledger_history.db"` | SQLite DB ファイルのパス　※存在しない場合は生成 |
 | `pricing_dir` | `litellm_ledger/pricing/` | 料金 TOML ディレクトリ |
-| `api_keys` | `None` | `{"GEMINI_API_KEY": "..."}` 形式の辞書。料金 TOML の都合上、`OPENAI_API_KEY` / `GEMINI_API_KEY` に対応 |
+| `api_keys` | `None` | `{"GEMINI_API_KEY": "..."}` `OPENAI_API_KEY` / `GEMINI_API_KEY`  |
 
 | メソッド | 説明 |
 |---|---|
@@ -106,7 +107,7 @@ id, timestamp, model, input_tokens, output_tokens, thinking_tokens, total_tokens
 
 ## 料金 TOML の管理
 
-`litellm_ledger/pricing/` の `*.toml` を自動ロードする。ファイルを追加するだけで新プロバイダに対応できる。
+`litellm_ledger/pricing/` の `*.toml` を自動ロードする。<br>
 
 ```toml
 [models."gemini/gemini-2.5-flash"]
@@ -127,3 +128,10 @@ thinking  = 15.00
 ```python
 print(client.pricing.list_models())  # 登録済みモデル一覧
 ```
+
+# Author
+高橋かずひと(https://x.com/KzhtTkhs)
+ 
+# License 
+LiteLLM Ledger is under [MIT License](LICENSE).<br>
+サンプル画像は[フリー素材ぱくたそ](https://www.pakutaso.com)様の写真を利用しています。
