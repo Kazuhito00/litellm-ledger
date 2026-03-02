@@ -1,7 +1,7 @@
 > [!WARNING]
 > 自分用ライブラリです。<br>
 > コスト計算の正確性を保証しません。<br>
-> また、料金レートはライブラリ内のTOMLに保持しており、各サービスのアップデートなどでズレる可能性があります。
+> また、料金レートはライブラリ内に保持しており、各サービスのアップデートなどでズレる可能性があります。
 
 # LiteLLM Ledger
 
@@ -112,7 +112,7 @@ id, timestamp, model, input_tokens, output_tokens, thinking_tokens, total_tokens
 
 ## 料金 TOML の管理
 
-`litellm_ledger/pricing/` の `*.toml` を自動ロードする。<br>
+`litellm_ledger/pricing/` の `*.toml` を自動ロード<br>
 
 ```toml
 [models."gemini/gemini-2.5-flash"]
@@ -128,7 +128,7 @@ output    = 15.00
 thinking  = 15.00
 ```
 
-未登録モデルを使用した場合、コストは `0.0` として記録され警告が出力される。
+未登録モデルを使用した場合、コストは `0.0` で記録します。
 
 ```python
 print(client.pricing.list_models())  # 登録済みモデル一覧
@@ -138,5 +138,7 @@ print(client.pricing.list_models())  # 登録済みモデル一覧
 高橋かずひと(https://x.com/KzhtTkhs)
  
 # License 
-LiteLLM Ledger is under [MIT License](LICENSE).<br>
-サンプル画像は[フリー素材ぱくたそ](https://www.pakutaso.com)様の写真を利用しています。
+LiteLLM Ledger is under [MIT License](LICENSE).
+
+# License(Image)
+サンプル画像は[フリー素材ぱくたそ](https://www.pakutaso.com)様の[新宿西口の繁華街で行き交う人々と光る看板](https://www.pakutaso.com/20231139324post-49283.html)写真を利用しています。
