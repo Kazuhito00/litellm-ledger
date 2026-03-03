@@ -104,7 +104,7 @@ client.db.to_csv("ledger_history.csv")
 **CSV フォーマット:**
 
 ```
-id, timestamp, model, input_tokens, output_tokens, thinking_tokens, total_tokens, cost_usd
+id, timestamp, model, input_tokens, output_tokens, thinking_tokens, total_tokens, cost_usd, elapsed_sec
 ```
 
 - `output_tokens`: thinking/reasoning トークンを除いた純粋な出力トークン数
