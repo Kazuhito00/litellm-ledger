@@ -15,6 +15,7 @@ class CallRecord:
     thinking_tokens: int
     total_tokens: int
     cost_usd: float
+    elapsed_sec: float = 0.0
     timestamp: str = field(default="")
 
     def __post_init__(self):
@@ -31,6 +32,7 @@ _CSV_FIELDS = [
     "thinking_tokens",
     "total_tokens",
     "cost_usd",
+    "elapsed_sec",
 ]
 
 _CREATE_TABLE_SQL = """
@@ -42,15 +44,16 @@ _CREATE_TABLE_SQL = """
         output_tokens   INTEGER NOT NULL DEFAULT 0,
         thinking_tokens INTEGER NOT NULL DEFAULT 0,
         total_tokens    INTEGER NOT NULL DEFAULT 0,
-        cost_usd        REAL    NOT NULL DEFAULT 0.0
+        cost_usd        REAL    NOT NULL DEFAULT 0.0,
+        elapsed_sec     REAL    NOT NULL DEFAULT 0.0
     )
 """
 
 _INSERT_SQL = """
     INSERT INTO call_history
         (timestamp, model, input_tokens, output_tokens,
-         thinking_tokens, total_tokens, cost_usd)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+         thinking_tokens, total_tokens, cost_usd, elapsed_sec)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
 """
 
 
@@ -97,9 +100,20 @@ class HistoryDB:
     def _init_db(self) -> None:
         conn = self._connect()
         conn.execute(_CREATE_TABLE_SQL)
+        self._migrate(conn)
         conn.commit()
         if self._conn is None:
             conn.close()
+
+    @staticmethod
+    def _migrate(conn: sqlite3.Connection) -> None:
+        """既存テーブルに不足カラムがあれば追加する。"""
+        cursor = conn.execute("PRAGMA table_info(call_history)")
+        existing = {row[1] for row in cursor.fetchall()}
+        if "elapsed_sec" not in existing:
+            conn.execute(
+                "ALTER TABLE call_history ADD COLUMN elapsed_sec REAL NOT NULL DEFAULT 0.0"
+            )
 
     def save(self, record: CallRecord) -> None:
         """レコードを DB に保存する。"""
@@ -112,6 +126,7 @@ class HistoryDB:
                 record.thinking_tokens,
                 record.total_tokens,
                 record.cost_usd,
+                record.elapsed_sec,
             ))
 
     # ------------------------------------------------------------------

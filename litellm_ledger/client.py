@@ -1,4 +1,5 @@
 import os
+import time
 from pathlib import Path
 
 import litellm
@@ -51,11 +52,13 @@ class LiteLLMClient:
         litellm.completion を呼び出し、レスポンスを記録して返す。
         litellm の追加オプション（temperature, max_tokens 等）は **kwargs で透過的に渡せる。
         """
+        t0 = time.perf_counter()
         response = litellm.completion(model=model, messages=messages, **kwargs)
-        self._record(model, response)
+        elapsed_sec = time.perf_counter() - t0
+        self._record(model, response, elapsed_sec)
         return response
 
-    def _record(self, model: str, response: litellm.ModelResponse) -> None:
+    def _record(self, model: str, response: litellm.ModelResponse, elapsed_sec: float = 0.0) -> None:
         usage = response.usage
         input_tokens   = getattr(usage, "prompt_tokens", 0) or 0
         completion_tokens = getattr(usage, "completion_tokens", 0) or 0
@@ -80,6 +83,7 @@ class LiteLLMClient:
             thinking_tokens=thinking_tokens,
             total_tokens=total_tokens,
             cost_usd=cost,
+            elapsed_sec=round(elapsed_sec, 3),
         ))
 
     @staticmethod
